@@ -14,23 +14,19 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.text.NumberFormat;
+
 
 /**
  * This app displays an order form to order coffee.
  */
 public class MainActivity extends AppCompatActivity {
     private int quantity = 1;
-    private double PRICE_PER_COFFEE = 5.00;
-    private double PRICE_FOR_CHOCOLATE = 2.00;
-    private double PRICE_FOR_CREAM = 1.00;
     private String name = "";
 
     @Override
@@ -50,7 +46,6 @@ public class MainActivity extends AppCompatActivity {
         boolean hasChocolate = checkboxForChocolate.isChecked();
         double price = calculatePrice(hasWhippedCream, hasChocolate);
         createOrderSummary(price, hasWhippedCream, hasChocolate );
-        //displayMessage(priceMessage);
     }
 
     /**
@@ -63,12 +58,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     /**
-     * This method displays the given text on the screen.
+     * Increases the quantity
      */
-//    private void displayMessage(String message) {
-//        TextView orderSummaryView = (TextView) findViewById(R.id.order_summary_view);
-//        orderSummaryView.setText(message);
-//    }
 
     public void increment(View view){
         if (quantity == 100){
@@ -79,6 +70,9 @@ public class MainActivity extends AppCompatActivity {
         display(quantity);
     }
 
+    /**
+     * Decreases the quantity
+     */
     public void decrement(View view){
         if (quantity == 1){
             Toast.makeText(this, "You cannot order less than 1 coffees", Toast.LENGTH_SHORT).show();
@@ -91,8 +85,15 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * calculate the price of the order
+     * @param whippedCream - if whipped cream is selected
+     * @param hasChocolate - if chocolate is selected
      */
     private double calculatePrice(boolean whippedCream, boolean hasChocolate) {
+
+        double PRICE_PER_COFFEE = 5.00;
+        double PRICE_FOR_CHOCOLATE = 2.00;
+        double PRICE_FOR_CREAM = 1.00;
+
         double eachCoffeePrice = PRICE_PER_COFFEE;
         if (whippedCream){
             eachCoffeePrice += PRICE_FOR_CREAM;
@@ -103,6 +104,13 @@ public class MainActivity extends AppCompatActivity {
         return quantity * eachCoffeePrice;
     }
 
+    /**
+     * This method creates an order summary, then sends the order to an email app to be sent
+     *
+     * @param price - the total price of the order
+     * @param whippedCream - if whipped cream is selected
+     * @param hasChocolate - if chocolate is selected
+     */
     private void createOrderSummary(double price, boolean whippedCream, boolean hasChocolate){
         String message = "Name: " + name;
         message += "\nadded whipped cream: " + whippedCream;
@@ -120,6 +128,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Sets the name of the person ordering
+     */
     private void setName(View view){
         EditText nameText = (EditText) findViewById(R.id.name_text_field);
         name = nameText.getText().toString();
